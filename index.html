@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Landing Gear Quiz – Chapter 13</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#111827;--mu:#6b7280;--ac:#1d4ed8;--ok:#15803d;--okb:#dcfce7;--no:#b91c1c;--nob:#fee2e2;--bd:#d1d5db;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f172a;--card:#1e293b;--tx:#f1f5f9;--mu:#94a3b8;--ac:#60a5fa;--ok:#4ade80;--okb:#14532d;--no:#f87171;--nob:#7f1d1d;--bd:#475569}}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.55}
+main{max-width:680px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px}
+h1{font-size:20px;margin:4px 0 12px}
+.bar{height:6px;background:var(--bd);border-radius:3px;margin:10px 0 14px}.bar i{display:block;height:100%;background:var(--ac);border-radius:3px}
+.q{font-size:17px;font-weight:600;direction:ltr;text-align:left;margin-bottom:12px}
+.o{display:block;width:100%;text-align:left;direction:ltr;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:11px 13px;margin:8px 0;font-size:15px;cursor:pointer}
+.o.c{background:var(--okb);border-color:var(--ok)}.o.w{background:var(--nob);border-color:var(--no)}
+.ex{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--bg);font-size:14px}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 20px;font-size:15px;cursor:pointer;margin-top:12px}
+.mu{color:var(--mu);font-size:13px}.big{font-size:42px;font-weight:700}
+.rv{border-top:1px solid var(--bd);padding:10px 0;font-size:14px;direction:ltr;text-align:left}
+a{color:var(--ac)}
+</style></head><body><main><div class="card" id="app"></div>
+<p class="mu" style="text-align:center">Source: <a href="https://www.faa.gov/regulations_policies/handbooks_manuals/aircraft/amt_handbook" target="_blank" rel="noopener">FAA-H-8083-31 AMT Airframe Handbook Vol. 2, Ch. 13</a></p></main>
+<script>
+const Q=[
+["Squat switch state when the aircraft is ON the ground:",["OPEN (strut compressed)","CLOSED (strut compressed)","Energized","Depends on gear handle"],0,"على الأرض: الـ strut مضغوط ← الـ switch OPEN. عند الإقلاع (strut extends) ← CLOSES."],
+["The squat switch prevents:",["Gear extending in flight","Gear RETRACTING on the ground","Tire overinflation","Nose wheel shimmy"],1,"يمنع سحب العجلات (retraction) وهي على الأرض عبر solenoid lock-pin في الـ handle."],
+["The lower chamber of an oleo strut is ALWAYS filled with:",["Nitrogen","Air","Hydraulic fluid","Grease"],2,"Lower = hydraulic fluid دائماً. Upper = air أو nitrogen."],
+["In a metering pin, the NARROW portion in the orifice means:",["Less fluid flows","More fluid flows","No flow","Flow stops at extension"],1,"Narrow = MORE flow. Wider = less flow. الـ taper يتحكم بالمعدل أثناء compression."],
+["The recoil (snubbing) valve restricts fluid flow during:",["Compression stroke","Extension stroke","Towing","Retraction"],1,"يعمل في extension stroke فقط ليمنع الصدمة والـ rebound."],
+["Torque links:",["Prevent piston rotation and retain the piston when extended","Seal the cylinders","Control fluid rate","Limit tire pressure"],0,"يحافظون على اصطفاف العجلات ويمنعون خروج الـ piston بعد الإقلاع."],
+["Locating (centering) cams are active when the strut is:",["Compressed","Fully extended","Half compressed","Being serviced"],1,"Fully extended فقط ← تصطف العجلة مع المحور وتدخل الـ wheel well. بعد الهبوط تنفصل الـ cams وتتفعل التوجيه."],
+["AN6287-1 valve core pressure rating:",["2,000 psi (body 3,000)","3,000 psi","5,000 psi","1,000 psi"],0,"Body 3,000 psi لكن الـ core فقط 2,000 psi. الـ swivel nut أصغر (5/8 على 3/4)."],
+["MS28889-1 valve:",["Has a core, 3,000 psi","NO core, 5,000 psi","NO core, 2,000 psi","Has a core, 5,000 psi"],1,"MS28889-1: بدون core، 5,000 psi، والـ swivel nut بنفس حجم الـ body hex."],
+["When depressing a strut valve core, position yourself:",["In front","To the SIDE of its trajectory","Directly above","Behind the wheel"],1,"الـ core قد ينطلق بضغط الـ strut ويسبب إصابة خطيرة."],
+["Strut inflation should be done:",["Quickly","SLOWLY","Only with oxygen","Without nitrogen"],1,"ببطء لتجنب الحرارة الزائدة والـ over-inflation."],
+["When bleeding a strut, the bleed hose end must be:",["Out of the fluid","Below the surface of the fluid","Capped","Above the container"],1,"تحت سطح السائل حتى ترى فقاعات الهواء وتتأكد من توقفها."],
+["Insufficient fluid or trapped air in a strut causes:",["Strut bottoming out","Higher cooling","Gear locking","Better damping"],0,"الـ compression لا يُحدّ بشكل صحيح ← bottoming ← الصدمة تنتقل للـ airframe."],
+["TRUE shock absorption (energy to heat) is provided by:",["Leaf spring","Bungee cord","Oleo (air/oil) strut","Rigid steel gear"],2,"فقط الـ oleo strut يحوّل الطاقة إلى حرارة. البقية تغيّر توقيت نقل الطاقة."],
+["Most common non-shock-absorbing gear:",["Bungee","Leaf-type spring","Rigid steel","Donut rubber"],1,"Leaf-type spring مثل Cessna."],
+["Advantage of tricycle gear:",["Prevents ground-looping","Longer propeller","Lighter weight","Fewer wheels"],0,"الـ CG أمام الـ main gear ← لا ground-looping، فرملة أقوى، رؤية أفضل."],
+["Tail wheel gear: main gear is located:",["Aft of CG","Forward of the CG","At the CG","Under the tail"],1,"Main gear أمام الـ CG والذيل يحتاج عجلة ثالثة."],
+["Tandem gear aircraft include:",["Boeing 737","Cessna 172","B-52 and sailplanes","Boeing 777"],2,"Tandem: B-47, B-52, U2, Harrier، ومعظم الـ sailplanes."],
+["A bogie is:",["Gear with more than two wheels on one strut","A skid","A retraction actuator","A type of ski"],0,"أكثر من عجلتين على strut واحد (مثال Boeing 777 triple bogie)."],
+["Why do slow aircraft use fixed gear?",["Retraction weight is NOT offset by drag reduction","They have no struts","Regulations require it","Gear cannot fit"],0,"على السرعات المنخفضة وزن آلية السحب أكبر من فائدة تقليل الـ drag."],
+["Tow-in means wheel paths:",["Diverge forward","Converge forward","Are parallel","Tilt outward"],1,"Tow-in = converge، فجوة في FRONT. Tow-out = diverge، فجوة في REAR."],
+["Camber is checked with a:",["Carpenter's square","Bubble protractor","Spring scale","Go/no-go gauge"],1,"Bubble protractor. الـ carpenter's square لـ tow-in/out."],
+["On air/oil struts, tow-in/out is corrected by shims placed:",["Between torque link arms","At the axle flange","Under the tire","At the valve"],0,"Air/oil: بين ذراعي الـ torque links. Spring steel: بين الـ axle والـ flange."],
+["Positive camber means the top of the wheel tilts:",["Inward","Outward","Forward","Aft"],1,"Positive = outward. Negative = inward."],
+["The trunnion alone, in gear-down position:",["Cannot support the aircraft; needs the drag brace","Supports all loads","Locks the gear","Is rigid"],0,"الـ trunnion يدور بحرية؛ الـ drag brace (over center) هو من يثبّت الـ gear."],
+["For ground operation the drag brace is:",["Folded","Straightened OVER CENTER and locked","Removed","Free to swing"],1,"Over center إلى stop ومقفل ← gear صلب."],
+["In a power-pack system the gear is held retracted by:",["Mechanical latch","Hydraulic pressure","Springs","Gravity"],1,"الضغط الهيدروليكي. إذا انخفض يُغلق pressure switch ويعيد تشغيل المضخة."],
+["Sequence valves are used to:",["Time gear and door operation","Limit tire pressure","Dampen shimmy","Measure fluid"],0,"تضمن أن الأبواب تفتح قبل تحرك الـ gear."],
+["Emergency free-fall extension works by:",["Releasing the uplocks so gravity extends the gear","Cranking only","Reverse pump","Fuel pressure"],0,"الـ handle يفك الـ uplocks والهواء يساعد على الـ down-and-locked."],
+["Ground locks must have:",["Any bright paint","RED streamers","Green tags","Yellow tape"],1,"Red streamers لتُرى وتُزال قبل الطيران."],
+["Three green lights mean:",["Gear in transit","Gear DOWN and LOCKED","Gear up","Gear disagree"],1,"3 green = all down and locked. أحمر/barber pole = in transit."],
+["All gear indicator lights OUT usually mean:",["Malfunction","Gear UP and locked","Gear in transit","Squat switch failure"],1,"في كثير من الطائرات هذا هو المؤشر الطبيعي لـ gear up and locked."],
+["Proximity sensor with target NEAR gives:",["13 V = logic 1","0.3 V = logic 0","0 V = fault","5 V"],1,"Near = 0.3V = logic 0. Far = 13V = logic 1."],
+["Cleaning wheel bearings:",["Gasoline is OK","Use recommended solvent, NOT gasoline or jet fuel","Use water","Spin with air"],1,"المذيب الموصى به فقط."],
+["Drying a bearing with compressed air:",["Spin it quickly","Direct air between rollers, never spin","Air at the cage","Air at the cup only"],1,"التدوير بدون تشحيم قد يفجر الـ bearing ويسبب إصابة."],
+["Thermal plugs are found in the:",["Outboard wheel half","INBOARD wheel half","Tire tread","Axle"],1,"قرب مصدر حرارة الفرامل. ينصهر الـ core فيُفرغ الإطار قبل الانفجار."],
+["Wheel bead seat area is strengthened by:",["Painting","ROLLING during manufacture","Shot peening only","Welding"],1,"Rolling يعطي compressive prestress."],
+["The wheel-spin transducer (anti-skid) is typically mounted on the:",["Inner half","Outer half","Tire","Brake disc"],1,"في الـ outboard half، وقد يعمل كـ hub cap."],
+["Swinging the gear is required:",["After a hard or overweight landing","Only at delivery","Every flight","Never on jacks"],0,"أيضاً: annual، بعد استبدال أو ضبط أي جزء، أو عند البحث عن عطل."],
+["Over-center test: gear held 6 inches inboard and released must:",["Free fall into locked down","Stay in place","Retract","Need hydraulic help"],0,"يجب أن يسقط بحرية إلى down-and-locked."],
+["Over-travel of the actuating cylinder piston is needed to:",["Operate the latch mechanisms","Cool the fluid","Reduce drag","Reset the squat switch"],0,"الحركة الإضافية تشغّل الـ latches."],
+["On large aircraft, steering cylinders are kept at ___ psi so they also act as shimmy dampers:",["0","50","100","3,000"],2,"الـ compensator يحافظ على 100 psi دائماً ← steering damping بدون وحدة منفصلة."],
+["The non-hydraulic shimmy damper:",["Needs fluid at capacity","Has NO fluid; rubber piston + grease","Is vane-type","Uses nitrogen"],1,"Surface-effect damping ولا يحتاج سائل أبداً. أما piston-type فيجب ملؤه للـ capacity."],
+["Nose wheel disconnect pin allows 360° rotation for towing. Never rotate beyond:",["Limit lines marked on the airframe","90°","Nothing","The tow bar"],0,"تجاوز الحدود يتلف الـ steering."],
+["Doors adjusted too LOOSE result in:",["Structural damage","Wind catching, wear, parasite drag","Gear lock","Nothing"],1,"Too tight = structural damage."],
+["📌 Tricycle gear prevents ground-looping and allows forceful braking without nosing over because the CG is:",["Aft of MLG","Forward of NLG","Forward of MLG","Aft of NLG"],2,"الـ CG أمام الـ main gear ← القوى تُبقي الطائرة تتحرك للأمام."],
+["📌 Tail-wheel landing gear is also known as:",["Tandem gear","Small gear","Auxiliary gear","Conventional gear"],3,"Conventional gear لأن الطائرات القديمة استخدمته."],
+["⚠️ Tail-wheel aircraft: the CG is located ___ the main gear:",["Aft of (behind)","Forward of","Exactly at","Below"],0,"الـ Handbook: الـ main gear أمام الـ CG، أي أن الـ CG خلفه. مفتاح الامتحان القديم كتب forward of MLG وهذا يخالف الكتاب. اسأل الدكتور."],
+["📌 The part that attaches the strut to the airframe and lets the gear pivot for retraction:",["Side stay","Bracing strut","Torque link","Trunnion"],3,"Trunnion: امتداد للـ upper cylinder مع bearings للدوران."],
+["📌 The part between axle and cylinder that lets the piston slide in/out but prevents wheel swiveling:",["Trunnion","Side stay","Torque link","Shimmy damper"],2,"Torque link (scissors)."],
+["📌 True/False: Torque links prevent the piston and wheel assembly from swiveling.",["True","False"],0,"صحيح."],
+["📌 True/False: In an oleo strut, heat in the fluid is converted into mechanical energy.",["True","False"],1,"العكس: طاقة الصدمة الميكانيكية تتحول إلى heat."],
+["📌 The two chambers of an oleo strut are filled with:",["Oil and nitrogen (or air)","Hydraulic fluid and hydrogen","Oil only","Nitrogen and oxygen"],0,"Lower = hydraulic fluid. Upper = nitrogen أو air."],
+["📌 The two chambers are connected through:",["Flapper valve and metering pin","Metering pin and orifice","Orifice and snubber tube","Charging valve"],1,"الـ orifice مع الـ metering pin ينظمان تدفق السائل."],
+["📌 At COMPRESSION the metering pin/orifice restricts flow to resist:",["Shocks","Damping","Ground-looping","Rebound"],0,"Compression ← الصدمة. Extension ← rebound. لا تخلط بينهما."],
+["📌 At EXTENSION the snubbing device restricts flow to resist:",["Shocks","Compression","Ground-looping","Rebound"],3,"Recoil/snubbing valve يحد الـ rebound في extension stroke."],
+["📌 The purpose of the flapper (flutter) valve:",["Free flow on compression, restriction on extension","Restrict air compression","Separate oil from air","All of the above"],0,"اتجاه التدفق يختلف بين compression وextension."],
+["📌 True/False: The down-lock actuator prevents the piston and wheel from swiveling.",["True","False"],1,"هذه وظيفة الـ torque link."],
+["⚠️ The landing gear down-lock actuator is:",["Hydraulically actuated","Retracts the lower toggle to overcome the mechanical lock","Moves the stays to under-center","All of the above"],0,"A هو الأدعم من الكتاب، لكن نسخ الامتحان القديمة متضاربة (A وD). تأكد من الدكتور."],
+["📌 True/False: Gear DOWN and locked: upper and lower stays are over-center forming a mechanical lock.",["True","False"],0,"Over-center للـ gear DOWN فقط."],
+["📌 True/False: Gear UP and locked: the stays are over-center forming a mechanical lock.",["True","False"],1,"فخ: الـ over-center للـ down، أما الـ up فيمسكه uplock. اقرأ down أو up بدقة."],
+["📌 True/False: Ground-lock pins prevent collapse/retraction while the aircraft is in flight.",["True","False"],1,"Ground locks للأرض فقط وتُزال قبل الطيران."],
+["📌 The reason for using retractable gear:",["Aircraft fly at low speed","To reduce parasite drag","Fixed gear is unusual at low speed","All of the above"],1,"تقليل الـ parasite drag عند السرعات العالية."],
+["📌 If the gear fails to extend normally, the selector/free-fall valve is overridden by:",["Opening the uplock","Opening all lines to return","Gravity and aerodynamic assistance","All of the above"],3,"فتح الـ uplock مع الجاذبية والهواء."],
+["📌 True/False: The gear selector safety interlock is de-energized in flight and energized on the ground.",["True","False"],0,"على الأرض lock-pin يمنع الرفع، وفي الجو الـ solenoid يسحبه."],
+["📌 With gear selected DOWN, the control unit turns the pump off only if:",["Any wheel is down","Main wheels are down & locked","All 3 gear are down & locked","All of the above"],2,"كل الـ 3 gear down and locked."],
+["📌 Cockpit gear indication:",["Green triangles = up & locked","Red triangles = down & locked","All lights out = down & locked","Mixed green/red = fault, with warning light and horn"],3,"الخليط = disagree/fault. تذكر: كل الأضواء مطفأة = gear UP."],
+["📌 Wing pop-up indicators stand out when the gear is:",["Up & locked","Down & locked","Down & unlocked","Up & unlocked"],1,"Down & locked (نص الامتحان، ولم أجده في الملف)."],
+["📌 The nose wheel is centered for retraction by:",["Centering cam inside the oleo strut","Steering pedals","A spring","Steering actuator"],0,"Centering cams داخل الـ strut."],
+["📌 Large aircraft steering servo jacks rotate the nose wheel through the:",["Wheel axle","Centering cams","Torque links","Jacking point"],2,"عبر الـ torque links والـ steering collar."],
+["📌 The steering actuators (double servo jacks) are fixed to:",["Drag brace","Shock piston","Steering collar free to rotate around the leg","None of the above"],2,"Steering collar."],
+["📌 During takeoff and landing the nose steering:",["Is deactivated","Turns small degrees (rudder pedal input)","Is active only above 20 mph","Is de-energized by WOW"],1,"الـ rudder pedals تعطي درجات صغيرة عند السرعة العالية."],
+["📌 Aircraft without hydraulic nose steering get shimmy damping from:",["Piston-type damper","Centering cams","Compensator","Steering damper"],0,"Compensator والـ steering damper للنظام الهيدروليكي فقط."],
+["📌 Non-hydraulic steering is:",["Mechanically controlled, hydraulically actuated","Mechanically controlled and actuated","Electrically controlled, hydraulically actuated","All of the above"],1,"Push-pull tubes من الـ rudder pedals."],
+["📌 True/False: Fusible (thermal) plugs melt and let the tire deflate safely at overheat.",["True","False"],0,"core من alloy منخفض الانصهار."],
+["📌 'Wheel well' (wheel bay) means:",["A wheel in good condition","Footprint over land","Recess where the wheel stows","Gear attach point"],2,"Recess في الـ fuselage أو الجناح."],
+["📌 (Outside Ch.13 range) Tire red dot is positioned:",["Adjacent to the valve","Opposite the valve","At the part number","At the serial number"],0,"نقطة الخفة بجانب الـ valve، ومصدرها خارج المدى."],
+["Servicing a strut: after all air is released you must:",["Remove the valve right away","Compress the strut completely","Inflate fully","Jack the aircraft"],1,"Compress ثم أزل الـ valve ثم املأ السائل."],
+["Strut fluid is filled to:",["Half","Level of the service valve port","Top of piston","1 in below port"],1,"مستوى الـ service valve port."],
+["Before bleeding a strut, jack the aircraft until struts are:",["Fully compressed","Fully extended","Half extended","Removed"],1,"Fully extended مع تفريغ الضغط."],
+["Power pack gear DOWN: restrictors in the nose actuator because:",["Nose gear is lighter, so it must be slowed","Nose gear is heavier","To save fluid","To lock it"],0,"لتبطئ حركة الـ nose gear الأخف."],
+["Power pack gear UP: as cylinders move, the pistons:",["Release the mechanical down locks","Engage the down locks","Open the squat switch","Stop the pump"],0,"تفك الـ down locks."],
+["Large aircraft gear hydraulic pump is usually driven by:",["Engine accessory drive","Hand crank","Squat switch","Ram air only"],0,"مع auxiliary electric pumps."],
+["Advantage of proximity sensors:",["No moving parts to be contaminated","Higher voltage","Lighter wiring","No gauge needed"],0,"وتُضبط المسافة بـ go/no-go gauge."],
+["Reason to reject a wheel bearing:",["Discoloration from excessive heat","Clean grease","Light oil film","Correct fit"],0,"أي discrepancy ← استبدال."],
+["After cleaning and inspecting a bearing:",["Store it dry","Lubricate immediately to prevent corrosion","Spin it","Paint it"],1,"تشحيم فوراً."],
+["The steering follow-up linkage:",["Prevents over-steering by returning the metering valve toward neutral","Pressurizes cylinders","Vents air","Locks the gear"],0,"Follow-up ← neutral."],
+["On hydraulic steering failure, safety valves allow:",["Nose wheel to swivel freely","Gear retraction","Brakes to lock","Wheel to lock"],0,"تخفف الضغط ليدور الـ nose wheel بحرية."],
+["Vane-type shimmy damper contains:",["Spring-loaded replenishing reservoir","Rubber piston","No fluid","Bleed hole piston"],0,"أما الـ piston-type فيستخدم bleed hole."],
+["Modern wheels are:",["Single-piece","Two halves bolted, O-ring groove for tubeless","Wooden","Three-piece"],1,"Split wheel."],
+["Which wheel half drives the brake rotor?",["Inboard (inner)","Outboard","Either","Neither"],0,"الـ inner half (tangs، keys أو bolts)."],
+["After a thermal plug melts:",["Remove tire; inspect wheel and adjacent wheels","Re-inflate","Replace plug only","Continue"],0,"Tire out of service وفحص العجلات المجاورة."]
+];
+const app=document.getElementById("app");let order,i,score,wrong;
+const sh=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
+function start(){order=sh(Q.map((_,k)=>k));i=0;score=0;wrong=[];show()}
+function show(){
+ if(i>=order.length)return end();
+ const q=Q[order[i]],opts=sh(q[1].map((t,k)=>({t,ok:k===q[2]})));
+ app.innerHTML=`<h1>Landing Gear Quiz – Ch. 13</h1><div class="mu">السؤال ${i+1} / ${Q.length} · النتيجة ${score}</div><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><div class="q" dir="ltr">${q[0]}</div><div id="os"></div><div id="fb"></div>`;
+ const os=document.getElementById("os");
+ opts.forEach(o=>{const b=document.createElement("button");b.className="o";b.textContent=o.t;b.onclick=()=>pick(b,o,opts,q);os.appendChild(b)})}
+function pick(b,o,opts,q){
+ const bs=[...document.querySelectorAll(".o")];
+ bs.forEach((x,k)=>{x.disabled=true;if(opts[k].ok)x.classList.add("c")});
+ if(o.ok)score++;else{b.classList.add("w");wrong.push(order[i])}
+ document.getElementById("fb").innerHTML=`<div class="ex">${o.ok?"✅ صحيح":"❌ خطأ"} — ${q[3]}</div><button class="btn" id="nx">${i+1<Q.length?"التالي":"النتيجة"}</button>`;
+ document.getElementById("nx").onclick=()=>{i++;show()}}
+function end(){
+ const p=Math.round(score/Q.length*100);
+ app.innerHTML=`<h1>النتيجة النهائية</h1><div class="big">${score} / ${Q.length} (${p}%)</div><p>${p>=90?"ممتاز":p>=75?"جيد، راجع الأخطاء":"تحتاج مراجعة أعمق للملف"}</p>`+
+ (wrong.length?`<h3>أسئلة أخطأت فيها</h3>`+wrong.map(k=>`<div class="rv"><b>${Q[k][0]}</b><br>✔ ${Q[k][1][Q[k][2]]}<br><span class="mu" dir="rtl">${Q[k][3]}</span></div>`).join(""):"")+
+ `<button class="btn" onclick="start()">إعادة الاختبار</button>`}
+start();
+</script></body></html>
